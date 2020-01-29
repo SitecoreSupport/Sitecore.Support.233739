@@ -69,7 +69,7 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ContentSearch\Pipelines\Search\SearchContentSearchIndex.cs" />
+    <Compile Include="ContentSearch\Client\Pipelines\Search\SearchContentSearchIndex.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

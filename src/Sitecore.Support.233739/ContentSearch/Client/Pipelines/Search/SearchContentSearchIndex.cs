@@ -1,4 +1,4 @@
-﻿namespace Sitecore.Support.ContentSearch.Pipelines.Search
+﻿namespace Sitecore.Support.ContentSearch.Client.Pipelines.Search
 {
     using Sitecore.ContentSearch;
     using Sitecore.ContentSearch.Abstractions;
@@ -53,8 +53,6 @@
             var rootItem = args.Root ?? args.Database.GetRootItem();
             Assert.IsNotNull(rootItem, "rootItem");
 
-            //Assert.IsNotNull(SearchManager.SystemIndex, "System index");
-
             if (args.TextQuery.IsNullOrEmpty())
             {
                 return;
@@ -100,11 +98,17 @@
                     {
                         if (args.ContentLanguage != null && !args.ContentLanguage.Name.IsNullOrEmpty())
                         {
-                            query = context.GetQueryable<SitecoreUISearchResultItem>().Where(i => i.Name.StartsWith(args.TextQuery) || (i.Content.Contains(args.TextQuery) && i.Language.Equals(args.ContentLanguage.Name)));
+                            // Sitecore.Support.233739 +++
+                            //query = context.GetQueryable<SitecoreUISearchResultItem>().Where(i => i.Name.StartsWith(args.TextQuery) || (i.Content.Contains(args.TextQuery) && i.Language.Equals(args.ContentLanguage.Name)));        
+                            query = context.GetQueryable<SitecoreUISearchResultItem>().Where(i => i.Name.StartsWith(args.TextQuery) || (i.Content.Contains(args.TextQuery) || i.Name.Equals(args.TextQuery) || i.Content.Equals(args.TextQuery) && i.Language.Equals(args.ContentLanguage.Name)));
+                            // Sitecore.Support.233739 ---
                         }
                         else
                         {
-                            query = context.GetQueryable<SitecoreUISearchResultItem>().Where(i => i.Name.StartsWith(args.TextQuery) || i.Content.Contains(args.TextQuery));
+                            // Sitecore.Support.233739 +++
+                            //query = context.GetQueryable<SitecoreUISearchResultItem>().Where(i => i.Name.StartsWith(args.TextQuery) || i.Content.Contains(args.TextQuery));
+                            query = context.GetQueryable<SitecoreUISearchResultItem>().Where(i => i.Name.StartsWith(args.TextQuery) || i.Content.Contains(args.TextQuery) || i.Name.Equals(args.TextQuery) || i.Content.Equals(args.TextQuery));
+                            // Sitecore.Support.233739 ---
                         }
                     }
 
